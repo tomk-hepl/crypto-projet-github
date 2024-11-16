@@ -1,37 +1,30 @@
 package org.crypto_project.aes;
 
-import org.crypto_project.utils.TCPServer;
-import org.crypto_project.utils.TripleDES;
+import org.crypto_project.utils.*;
 
-import java.util.Objects;
+import java.io.IOException;
 
 public class ServerAES {
     private final static int PORT = 6666;
-    private final static String KEY = "9mng65v8jf4lxn93nabf981m";
 
     public static void main(String[] args) throws Exception {
-        System.out.println("AES Server initialisation...");
-        TCPServer server = new TCPServer();
+        TCPServer server = Utilities.serverInit("AES", PORT);
 
-        server.start(PORT);
-        System.out.println("The server is listening to port " + PORT + "...");
-
-        System.out.println("Waiting for new messages:");
+        // The server will listen on loop
         boolean done = false;
         while (!done) {
             try {
-                // Waiting for new clients
-                String hello = server.readMessageAndClose();
+                String key = DiffieHellmanExchange.serverExchange(server);
 
-                if (!Objects.equals(hello, "Hello")) {
-                    throw new Exception("Incorrect Hello message");
-                }
-
-                String message = TripleDES.decrypt(encryptedMessage, KEY);
-                System.out.println("received message: "+encryptedMessage+"\n\t=> decrypted message: "+message);
+                // listen in loop for client messages until it disconnect
+                Utilities.readAndDecryptEveryClientMsgUntilItDisconnects(server, new AES(), key);
+            } catch (IOException e) {
+                // If current client disconnected, listen to new client
+                System.out.println("Error: " + e.getMessage());
+                System.out.println("The server is waiting for new client to port " + PORT + "...");
             } catch (Exception e) {
                 server.stop();
-                e.printStackTrace();
+                System.out.println("Server stopped: "+e.getMessage());
                 done = true;
             }
         }

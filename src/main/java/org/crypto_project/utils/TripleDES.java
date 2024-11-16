@@ -5,11 +5,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class TripleDES {
+public class TripleDES implements IAlgorithm {
 	private static final String CIPHER_TYPE = "DESede/ECB/PKCS5Padding";
 	private static final String CIPHER_NAME = "DESede";
 	
-    public static String encrypt(String message, String key) throws Exception {
+    public String encrypt(String message, String key) throws Exception {
 		// key
         byte[] secretKey = key.getBytes();
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, CIPHER_NAME);
@@ -28,7 +28,7 @@ public class TripleDES {
         return Base64.getEncoder().encodeToString(encryptedMessageBytes);
     }
 
-	public static String decrypt(String secreteMessage, String key) throws Exception {
+	public String decrypt(String secreteMessage, String key) throws Exception {
 		// key
 		byte[] secretKey = key.getBytes();
 		SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, CIPHER_NAME);

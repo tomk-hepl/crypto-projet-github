@@ -18,32 +18,47 @@ public class TCPServer {
 
     }
 
-    public String readMessageAndClose() throws IOException {
+    public void listenToNewClient() throws IOException {
         clientSocket = serverSocket.accept();
         out = new PrintWriter(clientSocket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        String message = in.readLine();
-        clientSocket.close();
-        in.close();
-        out.close();
+    }
+
+    public String readClientAndClose() throws IOException {
+        listenToNewClient();
+        String message = readMessage();
+        closeClient();
         return message;
     }
 
     public String readMessage() throws IOException {
-        clientSocket = serverSocket.accept();
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        String message = in.readLine();
-        clientSocket.close();
-        in.close();
-        out.close();
+        boolean clientDisconnected = clientSocket == null || clientSocket.isClosed();
+        String message;
+
+        // waiting for new client
+        if (clientDisconnected || (message = in.readLine()) == null) {
+            throw new IOException("Client disconnected");
+        }
+
         return message;
     }
 
-    public void stop() throws IOException {
+    public void sendMessage(String message) {
+        // if there is no client
+        if (clientSocket == null || clientSocket.isClosed()) {
+            throw new IllegalStateException("Client not connected");
+        }
+        out.println(message);
+    }
+
+    public void closeClient() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
+    }
+
+    public void stop() throws IOException {
+        closeClient();
         serverSocket.close();
     }
 }

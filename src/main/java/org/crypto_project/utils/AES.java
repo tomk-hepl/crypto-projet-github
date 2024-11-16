@@ -6,12 +6,12 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class AES {
+public class AES implements IAlgorithm {
 	private static final String CIPHER_TYPE = "AES/CBC/PKCS5PADDING";
 	private static final String CIPHER_NAME = "AES";
 	private static final IvParameterSpec VECTOR = new IvParameterSpec("1234567890123456".getBytes());
 	
-    public static String encrypt(String message, String key) throws Exception {
+    public String encrypt(String message, String key) throws Exception {
 		// key
         byte[] secretKey = key.getBytes();
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, CIPHER_NAME);
@@ -31,7 +31,7 @@ public class AES {
 		return Base64.getEncoder().encodeToString(encryptedMessageBytes);
     }
 	
-	public static String decrypt(String secreteMessage, String key) throws Exception {
+	public String decrypt(String secreteMessage, String key) throws Exception {
 		// key
 		byte[] secretKey = key.getBytes();
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, CIPHER_NAME);

@@ -17,6 +17,10 @@ public class TCPClient {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
+    public String readMessage() throws IOException {
+        return in.readLine();
+    }
+
     public void sendMessage(String msg) {
         out.println(msg);
     }
