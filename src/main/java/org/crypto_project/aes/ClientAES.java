@@ -7,7 +7,7 @@ public class ClientAES {
     private final static String IP = "127.0.0.1";
     private final static int PORT = 6666;
 
-    private final static int x = 1;
+
 
     public static void main(String[] args) throws Exception {
         TCPClient client = Utilities.clientInit("AES", IP, PORT);
