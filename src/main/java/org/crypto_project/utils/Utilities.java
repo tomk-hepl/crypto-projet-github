@@ -55,5 +55,3 @@ public class Utilities {
         System.out.println("Client closed");
     }
 }
-
-// [TEMP] - TEST PUSH GITHUB THOMAS
