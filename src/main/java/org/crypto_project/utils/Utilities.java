@@ -50,6 +50,50 @@ public class Utilities {
         System.out.println("=== Client closed ===\n");
     }
 
+    public static void scanUserMsgThenHashItAndSendItToServerWhileItIsNotEmpty(TCPClient client, HashAlgorithm algo) throws Exception
+    {
+
+        String message;
+        do {
+            //ask for message
+            System.out.print("Enter a message: ");
+            message = scanner.nextLine();
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            //Hash message
+            String hashedMessage = algo.hash(message);
+            System.out.println("Message '" + message + "' hashed");
+            //send message
+            System.out.println("Message hashed : " + hashedMessage);
+            String messageWithHash = message + "::" + hashedMessage;
+            client.sendMessage(messageWithHash);
+            System.out.println("Message hashed with  :: send =>  " + messageWithHash);
+
+
+
+
+        } while(!message.isEmpty());
+
+    }
+
+    public static void readAndCompareEveryClientHashedMsgUntilItDisconnects(TCPServer server,HashAlgorithm algo) throws Exception
+    {
+
+        String receivedMessage;
+        while ((receivedMessage = server.readMessage()) != null) {
+            String result = algo.compare(receivedMessage);
+            System.out.println(result);
+            //System.out.println("received message: "+receivedMessage);
+        }
+        System.out.println("=== Client closed ===\n");
+
+    }
+
+
+
+
     public static void closeClient(TCPClient client) throws IOException {
         client.stopConnection();
         System.out.println("Client closed");
