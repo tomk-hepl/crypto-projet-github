@@ -22,7 +22,7 @@ public class Utilities {
         return server;
     }
 
-    public static void scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(TCPClient client, IAlgorithm algo, String key) throws Exception {
+    public static void scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(TCPClient client, ISymmetricAlgorithm algo, String key) throws Exception {
         String message;
         do {
             // ask for message
@@ -41,7 +41,7 @@ public class Utilities {
         } while (!message.isEmpty());
     }
 
-    public static void readAndDecryptEveryClientMsgUntilItDisconnects(TCPServer server, IAlgorithm algo, String key) throws Exception {
+    public static void readAndDecryptEveryClientMsgUntilItDisconnects(TCPServer server, ISymmetricAlgorithm algo, String key) throws Exception {
         String encryptedMessage;
         while ((encryptedMessage = server.readMessage()) != null) {
             String message = algo.decrypt(encryptedMessage, key);
