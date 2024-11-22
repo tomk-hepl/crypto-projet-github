@@ -6,7 +6,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class AES implements ISymmetricAlgorithm {
+public class AES implements IEncryption {
 	private static final String CIPHER_TYPE = "AES/CBC/PKCS5PADDING";
 	private static final String CIPHER_NAME = "AES";
 	private static final IvParameterSpec VECTOR = new IvParameterSpec("1234567890123456".getBytes());
@@ -57,7 +57,7 @@ public class AES implements ISymmetricAlgorithm {
 			throw new NullPointerException("Key is null");
 		} else if (key.isEmpty()) {
 			throw new IllegalArgumentException("Key is empty");
-		} else if (key.length() != 16) {
+		} else if (key.length() != 16 && key.length() != 24 && key.length() != 32) {
 			throw new IllegalArgumentException("Wrong length of key");
 		}
 	}

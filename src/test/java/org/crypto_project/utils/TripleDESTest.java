@@ -6,9 +6,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TripleDESTest extends AbstractSymmetricAlgoTest implements ISymmetricAlgoTest {
+class TripleDESTest extends AbstractEncryptionTest implements IEncryptionTest {
     @Override
-    protected ISymmetricAlgorithm getAlgorithm() {
+    protected IEncryption getAlgorithm() {
         return new TripleDES();
     }
 

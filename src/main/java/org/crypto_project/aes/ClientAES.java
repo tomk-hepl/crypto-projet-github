@@ -10,7 +10,7 @@ public class ClientAES {
     public static void main(String[] args) throws Exception {
         TCPClient client = Utilities.clientInit("AES", IP, PORT);
 
-        String key = DiffieHellmanExchange.clientExchange(client);
+        String key = new DiffieHellmanExchange().clientExchange(client);
 
         Utilities.scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(client, new AES(), key);
 

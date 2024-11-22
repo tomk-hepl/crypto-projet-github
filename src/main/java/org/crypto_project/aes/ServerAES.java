@@ -14,7 +14,7 @@ public class ServerAES {
         boolean done = false;
         while (!done) {
             try {
-                String key = DiffieHellmanExchange.serverExchange(server);
+                String key = new DiffieHellmanExchange().serverExchange(server);
 
                 // listen in loop for client messages until it disconnect
                 Utilities.readAndDecryptEveryClientMsgUntilItDisconnects(server, new AES(), key);

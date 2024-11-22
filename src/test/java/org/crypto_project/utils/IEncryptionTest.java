@@ -4,7 +4,7 @@ import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
-public interface ISymmetricAlgoTest {
+public interface IEncryptionTest {
     static Stream<Arguments> wrongSizeKey() {
         return null;
     }

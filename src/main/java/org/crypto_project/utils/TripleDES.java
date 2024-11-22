@@ -5,7 +5,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class TripleDES implements ISymmetricAlgorithm {
+public class TripleDES implements IEncryption {
 	private static final String CIPHER_TYPE = "DESede/ECB/PKCS5Padding";
 	private static final String CIPHER_NAME = "DESede";
 

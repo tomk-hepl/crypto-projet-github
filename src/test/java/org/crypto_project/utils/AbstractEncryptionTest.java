@@ -7,9 +7,9 @@ import javax.crypto.BadPaddingException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
-abstract class AbstractSymmetricAlgoTest implements ISymmetricAlgoTest {
+abstract class AbstractEncryptionTest implements IEncryptionTest {
 
-    abstract ISymmetricAlgorithm getAlgorithm(); // Method to be implemented by subclasses
+    abstract IEncryption getAlgorithm(); // Method to be implemented by subclasses
 
     @ParameterizedTest
     @MethodSource("wrongSizeKey")

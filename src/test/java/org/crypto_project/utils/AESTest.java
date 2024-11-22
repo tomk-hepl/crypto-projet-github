@@ -6,9 +6,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AESTest extends AbstractSymmetricAlgoTest implements ISymmetricAlgoTest {
+class AESTest extends AbstractEncryptionTest implements IEncryptionTest {
     @Override
-    protected ISymmetricAlgorithm getAlgorithm() {
+    protected IEncryption getAlgorithm() {
         return new AES();
     }
 
@@ -16,7 +16,10 @@ class AESTest extends AbstractSymmetricAlgoTest implements ISymmetricAlgoTest {
         return Stream.of(
                 Arguments.of(""),
                 Arguments.of("hello"),
-                Arguments.of("9mng65v8jf4lxn93nabf981m"),
+                Arguments.of("9mng65v8jf4lxn93ddddddd"),
+                Arguments.of("9mng65v8jf4lxn93ddddddddf"),
+                Arguments.of("9mng65v8jf4lxn93ddddddddddddddd"),
+                Arguments.of("9mng65v8jf4lxn93ddddddddddddddddo"),
                 Arguments.of("101010101156418345316831765")
         );
     }
@@ -25,6 +28,8 @@ class AESTest extends AbstractSymmetricAlgoTest implements ISymmetricAlgoTest {
         return Stream.of(
                 Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "ABCDEfghijkLmnop"),
                 Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "9mng65v8jf4lxn93"),
+                Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "9mng65v8jf4lxn93dddddddd"),
+                Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "9mng65v8jf4lxn93dddddddddddddddd"),
                 Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "aaaaaaaaaaaaaaaa")
         );
     }
