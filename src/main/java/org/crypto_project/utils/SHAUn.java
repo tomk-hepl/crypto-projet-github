@@ -36,7 +36,7 @@ public class SHAUn implements HashAlgorithm  {
 
 
         // Split the received message to separate the raw message from the hash
-        String[] parts = message.split("::"); // Expected: ‘message::hash’
+        String[] parts = message.split("=="); // Expected: ‘message::hash’
         if (parts.length != 2) {
             return "Invalid message format. Expected 'message::hash'.";
         }

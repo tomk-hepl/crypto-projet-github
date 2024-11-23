@@ -1,6 +1,11 @@
 package org.crypto_project.utils;
 
 import java.io.IOException;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Scanner;
 
 public class Utilities {
@@ -67,9 +72,9 @@ public class Utilities {
             System.out.println("Message '" + message + "' hashed");
             //send message
             System.out.println("Message hashed : " + hashedMessage);
-            String messageWithHash = message + "::" + hashedMessage;
+            String messageWithHash = message + "==" + hashedMessage;
             client.sendMessage(messageWithHash);
-            System.out.println("Message hashed with  :: send =>  " + messageWithHash);
+            System.out.println("Message hashed with  == send =>  " + messageWithHash);
 
 
 
@@ -90,6 +95,58 @@ public class Utilities {
         System.out.println("=== Client closed ===\n");
 
     }
+
+
+    public static void scanUserMsgThenSignAndSendToServerWhileItIsNotEmpty(TCPClient client, RSAHashAlgorithm algo, PrivateKey privateKey) throws Exception {
+        String message;
+        do {
+            // //ask for message
+            System.out.print("Enter a message: ");
+            message = scanner.nextLine();
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            // Sign the message (hash + RSA)
+            String signature = algo.rsahash(message,privateKey);
+            System.out.println("Message signed with RSA: " + signature);
+
+            // Add signature to message
+            String messageWithSignature = message + "==" + signature;
+
+            // send the signed message
+            client.sendMessage(messageWithSignature);
+            System.out.println("Signed message sent: " + messageWithSignature);
+
+        } while (!message.isEmpty());
+    }
+
+
+    public static void readAndVerifyEveryClientSignedMsgUntilItDisconnects(TCPServer server, RSAHashAlgorithm algo, PublicKey publicKey) throws Exception {
+        String receivedMessage;
+        while ((receivedMessage = server.readMessage()) != null) {
+            // Verify the signature
+            String result = algo.rsacompare(receivedMessage,publicKey);
+
+            System.out.println(result);
+        }
+        System.out.println("=== Client closed ===\n");
+    }
+
+    // Method for loading a public key from a string
+    public static PublicKey loadPublicKey(String publicKeyString) throws Exception {
+
+        // Remove spaces and line breaks
+        publicKeyString = publicKeyString.replaceAll("[\\s\\r\\n]+", "");
+        System.out.println("Cleaned public key: " + publicKeyString);
+        byte[] keyBytes = Base64.getDecoder().decode(publicKeyString);
+        X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes); //Returns the key bytes,
+        // encoded according to the X.509 standard.
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");//KeyFactory, qui est utilisé pour générer des clés
+        //à partir de la spécififcation RSA
+        return keyFactory.generatePublic(spec);
+    }
+
 
 
 
