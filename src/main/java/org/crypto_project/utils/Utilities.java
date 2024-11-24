@@ -87,10 +87,17 @@ public class Utilities {
     {
 
         String receivedMessage;
+
         while ((receivedMessage = server.readMessage()) != null) {
             String result = algo.compare(receivedMessage);
-            System.out.println(result);
-            //System.out.println("received message: "+receivedMessage);
+
+            String cleanResult = result.replace("Message valid : ", "");
+
+            System.out.println("Original message: " + cleanResult);
+
+            // Hashage avec Apache Commons
+            String apacheHash = algo.hashWithApacheCommons(cleanResult);
+            System.out.println("Apache hash : " + apacheHash);
         }
         System.out.println("=== Client closed ===\n");
 

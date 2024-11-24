@@ -61,4 +61,11 @@ public class SHAUn implements HashAlgorithm  {
         }
 
     }
+
+    @Override
+    public String hashWithApacheCommons(String message)  {
+
+
+        return org.apache.commons.codec.digest.DigestUtils.sha1Hex(message);
+    }
 }
