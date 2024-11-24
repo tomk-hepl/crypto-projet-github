@@ -1,5 +1,4 @@
 package org.crypto_project.utils;
-
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -54,4 +53,5 @@ public class Utilities {
         client.stopConnection();
         System.out.println("Client closed");
     }
+
 }
