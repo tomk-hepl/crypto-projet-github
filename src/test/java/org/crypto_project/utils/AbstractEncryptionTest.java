@@ -1,15 +1,26 @@
 package org.crypto_project.utils;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import javax.crypto.BadPaddingException;
 
+import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
-abstract class AbstractEncryptionTest implements IEncryptionTest {
+abstract class AbstractEncryptionTest {
 
-    abstract IEncryption getAlgorithm(); // Method to be implemented by subclasses
+    public abstract IEncryption getAlgorithm(); // Method to be implemented by subclasses
+
+    public abstract Stream<Arguments> wrongSizeKey();
+
+    public abstract Stream<Arguments> rightSizeKey();
+
+    public abstract Stream<Arguments> decryptionTestData();
+
+    public abstract Stream<Arguments> encryptionTestData();
 
     @ParameterizedTest
     @MethodSource("wrongSizeKey")

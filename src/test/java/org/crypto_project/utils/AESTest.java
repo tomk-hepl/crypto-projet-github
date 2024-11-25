@@ -6,13 +6,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AESTest extends AbstractEncryptionTest implements IEncryptionTest {
+class AESTest extends AbstractEncryptionTest {
     @Override
-    protected IEncryption getAlgorithm() {
+    public IEncryption getAlgorithm() {
         return new AES();
     }
 
-    protected Stream<Arguments> wrongSizeKey() {
+    public Stream<Arguments> wrongSizeKey() {
         return Stream.of(
                 Arguments.of(""),
                 Arguments.of("hello"),
@@ -24,7 +24,7 @@ class AESTest extends AbstractEncryptionTest implements IEncryptionTest {
         );
     }
 
-    protected Stream<Arguments> rightSizeKey() {
+    public Stream<Arguments> rightSizeKey() {
         return Stream.of(
                 Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "ABCDEfghijkLmnop"),
                 Arguments.of("+zdzVz5BBnhIDv6kVBuqqQ==", "9mng65v8jf4lxn93"),
@@ -34,7 +34,7 @@ class AESTest extends AbstractEncryptionTest implements IEncryptionTest {
         );
     }
 
-    protected Stream<Arguments> encryptionTestData() {
+    public Stream<Arguments> encryptionTestData() {
         return Stream.of(
                 Arguments.of("HelloWorld123", "1234567890123456", "URaJPXifgqeloZiWqKStvA=="),
                 Arguments.of("I'm testing the relevance of this Algorithm", "ABCDEFGHIJKLMNOP", "BpDwsbChGgnOurfVrvPlVeXri9aGcdPtYwmyYw5V9znKtMQwLEiyEBioeuHaBLfO"),
@@ -43,7 +43,7 @@ class AESTest extends AbstractEncryptionTest implements IEncryptionTest {
         );
     }
 
-    protected Stream<Arguments> decryptionTestData() {
+    public Stream<Arguments> decryptionTestData() {
         return Stream.of(
                 Arguments.of("URaJPXifgqeloZiWqKStvA==", "1234567890123456", "HelloWorld123"),
                 Arguments.of("BpDwsbChGgnOurfVrvPlVeXri9aGcdPtYwmyYw5V9znKtMQwLEiyEBioeuHaBLfO", "ABCDEFGHIJKLMNOP", "I'm testing the relevance of this Algorithm"),

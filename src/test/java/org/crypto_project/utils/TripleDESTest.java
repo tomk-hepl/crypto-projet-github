@@ -6,13 +6,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TripleDESTest extends AbstractEncryptionTest implements IEncryptionTest {
+class TripleDESTest extends AbstractEncryptionTest {
     @Override
-    protected IEncryption getAlgorithm() {
+    public IEncryption getAlgorithm() {
         return new TripleDES();
     }
 
-    protected Stream<Arguments> wrongSizeKey() {
+    public Stream<Arguments> wrongSizeKey() {
         return Stream.of(
                 Arguments.of(""),
                 Arguments.of("hello"),
@@ -21,7 +21,7 @@ class TripleDESTest extends AbstractEncryptionTest implements IEncryptionTest {
         );
     }
 
-    protected Stream<Arguments> rightSizeKey() {
+    public Stream<Arguments> rightSizeKey() {
         return Stream.of(
                 Arguments.of("+bBr7/FcxYA=", "ABCDEfghijkLmnopkrstuvyx"),
                 Arguments.of("+bBr7/FcxYA=", "9mng65v8jf4lxn93nabf981m"),
@@ -29,7 +29,7 @@ class TripleDESTest extends AbstractEncryptionTest implements IEncryptionTest {
         );
     }
 
-    protected Stream<Arguments> encryptionTestData() {
+    public Stream<Arguments> encryptionTestData() {
         return Stream.of(
                 Arguments.of("HelloWorld123", "123456789012345678901234", "3icuyJ8eHcBZBo8X7Pc4eQ=="),
                 Arguments.of("I'm testing the relevance of this Algorithm", "ABCDEFGHIJKLMNOPQRSTUVWX", "O6PY3xulkyh9i3mfH0MjWK4U21Lt6djNQ3Smb7cyL7poC6ll3vzrugr0RBVvmH2y"),
@@ -38,7 +38,7 @@ class TripleDESTest extends AbstractEncryptionTest implements IEncryptionTest {
         );
     }
 
-    protected Stream<Arguments> decryptionTestData() {
+    public Stream<Arguments> decryptionTestData() {
         return Stream.of(
                 Arguments.of("3icuyJ8eHcBZBo8X7Pc4eQ==", "123456789012345678901234", "HelloWorld123"),
                 Arguments.of("O6PY3xulkyh9i3mfH0MjWK4U21Lt6djNQ3Smb7cyL7poC6ll3vzrugr0RBVvmH2y", "ABCDEFGHIJKLMNOPQRSTUVWX", "I'm testing the relevance of this Algorithm"),
