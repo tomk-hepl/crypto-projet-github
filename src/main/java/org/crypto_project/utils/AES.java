@@ -6,12 +6,14 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
-public class AES implements IAlgorithm {
+public class AES implements IEncryption {
 	private static final String CIPHER_TYPE = "AES/CBC/PKCS5PADDING";
 	private static final String CIPHER_NAME = "AES";
 	private static final IvParameterSpec VECTOR = new IvParameterSpec("1234567890123456".getBytes());
 	
     public String encrypt(String message, String key) throws Exception {
+		checkKey(key);
+
 		// key
         byte[] secretKey = key.getBytes();
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, CIPHER_NAME);
@@ -32,6 +34,8 @@ public class AES implements IAlgorithm {
     }
 	
 	public String decrypt(String secreteMessage, String key) throws Exception {
+		checkKey(key);
+
 		// key
 		byte[] secretKey = key.getBytes();
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, CIPHER_NAME);
@@ -46,5 +50,15 @@ public class AES implements IAlgorithm {
 		// decrypt
 		byte[] decryptedMessageBytes = decryptCipher.doFinal(decodedMessageBytes);
 		return new String(decryptedMessageBytes, StandardCharsets.UTF_8);
+	}
+
+	private void checkKey(String key) {
+		if (key == null) {
+			throw new NullPointerException("Key is null");
+		} else if (key.isEmpty()) {
+			throw new IllegalArgumentException("Key is empty");
+		} else if (key.length() != 16 && key.length() != 24 && key.length() != 32) {
+			throw new IllegalArgumentException("Wrong length of key");
+		}
 	}
 }

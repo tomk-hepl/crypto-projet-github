@@ -19,14 +19,14 @@ public class Utilities {
     }
 
     public static TCPServer serverInit(String algo, int port) throws IOException {
-        System.out.println("=== "+algo+" Client ===");
+        System.out.println("=== "+algo+" Server ===");
         TCPServer server = new TCPServer();
         server.start(port);
         System.out.println("The server is waiting for new client to port " + port + "...");
         return server;
     }
 
-    public static void scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(TCPClient client, IAlgorithm algo, String key) throws Exception {
+    public static void scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(TCPClient client, IEncryption algo, String key) throws Exception {
         String message;
         do {
             // ask for message
@@ -45,7 +45,7 @@ public class Utilities {
         } while (!message.isEmpty());
     }
 
-    public static void readAndDecryptEveryClientMsgUntilItDisconnects(TCPServer server, IAlgorithm algo, String key) throws Exception {
+    public static void readAndDecryptEveryClientMsgUntilItDisconnects(TCPServer server, IEncryption algo, String key) throws Exception {
         String encryptedMessage;
         while ((encryptedMessage = server.readMessage()) != null) {
             String message = algo.decrypt(encryptedMessage, key);
