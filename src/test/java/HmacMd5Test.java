@@ -1,19 +1,22 @@
 import org.crypto_project.utils.HMACHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import static org.junit.Assert.*;
+import java.util.stream.Stream;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class HmacMd5Test {
 
-    @Test
-    public void hmacMd5TESTCompare() throws NoSuchAlgorithmException, InvalidKeyException {
+    @ParameterizedTest
+    @MethodSource("hmacMd5CompareData")
+    public void hmacMd5TESTCompare(String payload, String secretKey, String HashToCompare) throws NoSuchAlgorithmException, InvalidKeyException {
 
         String hmacMD5Algorithm = "HmacMD5"; // for the second method
-        String payload = "bonjour";
-        String secretKey = "S€cretK€y";
-        String HashToCompare = "1384db23d5d8df8b840efcbbfa2a1297";
-
         HMACHelper helper = new HMACHelper();
 
         // 1st method
@@ -23,10 +26,18 @@ public class HmacMd5Test {
         String result2 = helper.hmacWithApacheCommons(hmacMD5Algorithm, payload, secretKey);
 
         // Compare hardcoded values with the 2 algorithms
-        assertEquals(result1, HashToCompare);
-        assertEquals(result2, HashToCompare);
+        Assertions.assertEquals(result1, HashToCompare);
+        Assertions.assertEquals(result2, HashToCompare);
 
         // Compare the 2 methods between themselves...
-        assertEquals(result1, result2);
+        Assertions.assertEquals(result1, result2);
+    }
+
+    public Stream<Arguments> hmacMd5CompareData() {
+        return Stream.of(
+                Arguments.of("bonjour", "S€cretK€y", "1384db23d5d8df8b840efcbbfa2a1297")
+                //...
+
+        );
     }
 }
