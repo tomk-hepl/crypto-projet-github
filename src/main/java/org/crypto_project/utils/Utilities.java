@@ -82,6 +82,7 @@ public class Utilities {
         System.out.println("=== Client closed ===\n");
     }
 
+
     public static void scanUserMsgThenHashItAndSendItToServerWhileItIsNotEmpty(TCPClient client, HashAlgorithm algo) throws Exception
     {
 
@@ -181,13 +182,43 @@ public class Utilities {
         return keyFactory.generatePublic(spec);
     }
 
-
-
-
-
     public static void closeClient(TCPClient client) throws IOException {
         client.stopConnection();
         System.out.println("Client closed");
     }
+
+    // -------------------------------------------  RECAP METHOD ------------------------------------------- //
+
+    public static void sendCoucouMessage(TCPClient client, String key) throws Exception {
+        String message;
+        do {
+
+            // ask for message
+            System.out.print("Enter a message: ");
+            message = scanner.nextLine();
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            // encrypt message
+            //String encryptedMessage = algo.hash(message, key);
+
+            System.out.println("Message "+ message +" encrypted");
+            // send message
+            // client.sendMessage(encryptedMessage);
+            //System.out.println("Encrypted message sent: " + encryptedMessage);
+        } while (!message.isEmpty());
+    }
+
+    public static void readCoucouMessage(TCPServer server, String key) throws Exception {
+        String encryptedMessage;
+        while ((encryptedMessage = server.readMessage()) != null) {
+            // String message = algo.decrypt(encryptedMessage, key);
+            //System.out.println("received message: "+encryptedMessage+"\n\t=> decrypted message: "+message);
+        }
+        System.out.println("=== Client closed ===\n");
+    }
+
+    // -------------------------------------------  RECAP METHOD ------------------------------------------- //
 
 }
