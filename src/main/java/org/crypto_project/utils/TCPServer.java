@@ -24,13 +24,6 @@ public class TCPServer {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    public String readClientAndClose() throws IOException {
-        listenToNewClient();
-        String message = readMessage();
-        closeClient();
-        return message;
-    }
-
     public String readMessage() throws IOException {
         boolean clientDisconnected = clientSocket == null || clientSocket.isClosed();
         String message;

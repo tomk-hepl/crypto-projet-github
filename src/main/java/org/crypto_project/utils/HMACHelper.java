@@ -7,12 +7,12 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 // Implementation tutorial : https://www.baeldung.com/java-hmac
-public class HMACHelper implements IAlgorithm {
+public class HMACHelper implements IHMAC {
 
     String algorithm = "HmacMD5";
 
     // 1st method (with JDK API)
-    public String encrypt(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException  {
+    public String hash(String data, String key) throws NoSuchAlgorithmException, InvalidKeyException  {
         SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), algorithm);
         Mac hmacMD5 = Mac.getInstance(algorithm);
         hmacMD5.init(secretKeySpec);
@@ -31,8 +31,4 @@ public class HMACHelper implements IAlgorithm {
         return new HmacUtils(algorithm, key).hmacHex(data);
     }
 
-    @Override
-    public String decrypt(String secret, String key) {
-        return ""; // not used because of hashing, not crypting...
-    }
 }

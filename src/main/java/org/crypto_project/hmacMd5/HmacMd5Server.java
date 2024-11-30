@@ -21,7 +21,7 @@ public class HmacMd5Server {
                 server.listenToNewClient();
 
                 // listen in loop for client messages until it disconnect
-                Utilities.readAndDecryptEveryClientMsgUntilItDisconnects(server, new TripleDES(), secretKey);
+               Utilities.readAndHashEveryClientMsgUntilItDisconnects(server, new HMACHelper(), secretKey);
             } catch (IOException e) {
                 // If current client disconnected, listen to new client
                 System.out.println("Error: " + e.getMessage());

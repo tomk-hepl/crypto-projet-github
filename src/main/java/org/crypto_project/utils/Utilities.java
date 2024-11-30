@@ -45,11 +45,39 @@ public class Utilities {
         } while (!message.isEmpty());
     }
 
+    public static void scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(TCPClient client, IHMAC algo, String key) throws Exception {
+        String message;
+        do {
+            // ask for message
+            System.out.print("Enter a message: ");
+            message = scanner.nextLine();
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            // encrypt message
+            String encryptedMessage = algo.hash(message, key);
+            System.out.println("Message "+ message +" encrypted");
+            // send message
+            client.sendMessage(encryptedMessage);
+            System.out.println("Encrypted message sent: " + encryptedMessage);
+        } while (!message.isEmpty());
+    }
+
     public static void readAndDecryptEveryClientMsgUntilItDisconnects(TCPServer server, IEncryption algo, String key) throws Exception {
         String encryptedMessage;
         while ((encryptedMessage = server.readMessage()) != null) {
             String message = algo.decrypt(encryptedMessage, key);
             System.out.println("received message: "+encryptedMessage+"\n\t=> decrypted message: "+message);
+        }
+        System.out.println("=== Client closed ===\n");
+    }
+
+    public static void readAndHashEveryClientMsgUntilItDisconnects(TCPServer server, IHMAC algo, String key) throws Exception {
+        String hashedMessage;
+        while ((hashedMessage = server.readMessage()) != null) {
+            String message = algo.hash(hashedMessage, key);
+            System.out.println("received message: "+hashedMessage+"\n\t=> decrypted message: "+message);
         }
         System.out.println("=== Client closed ===\n");
     }

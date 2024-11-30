@@ -1,4 +1,5 @@
-import org.crypto_project.utils.HMACHelper;
+package org.crypto_project.utils;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,7 +21,7 @@ public class HmacMd5Test {
         HMACHelper helper = new HMACHelper();
 
         // 1st method
-        String result1 = helper.encrypt(payload, secretKey);
+        String result1 = helper.hash(payload, secretKey);
 
         // 2nd method
         String result2 = helper.hmacWithApacheCommons(hmacMD5Algorithm, payload, secretKey);
