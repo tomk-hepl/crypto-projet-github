@@ -6,4 +6,6 @@ public interface HashAlgorithm {
 
     String compare(final  String message) throws Exception;
 
+    String hashWithApacheCommons(final  String message) throws Exception;
+
 }

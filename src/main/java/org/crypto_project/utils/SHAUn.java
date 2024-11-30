@@ -36,7 +36,7 @@ public class SHAUn implements HashAlgorithm  {
 
 
         // Split the received message to separate the raw message from the hash
-        String[] parts = message.split("::"); // Expected: ‘message::hash’
+        String[] parts = message.split("=="); // Expected: ‘message::hash’
         if (parts.length != 2) {
             return "Invalid message format. Expected 'message::hash'.";
         }
@@ -60,5 +60,12 @@ public class SHAUn implements HashAlgorithm  {
             return "Hash mismatch! Invalid message.";
         }
 
+    }
+
+    @Override
+    public String hashWithApacheCommons(String message)  {
+
+
+        return org.apache.commons.codec.digest.DigestUtils.sha1Hex(message);
     }
 }
