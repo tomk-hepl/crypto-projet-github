@@ -200,7 +200,7 @@ public class Utilities {
 
             // SHA with RSA (generate)
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048); // Taille de la clé
+            keyPairGenerator.initialize(2048);
             KeyPair keyPair = keyPairGenerator.generateKeyPair();
             PrivateKey privateKey = keyPair.getPrivate();
             PublicKey publicKey = keyPair.getPublic();
@@ -260,6 +260,7 @@ public class Utilities {
                 throw new Exception("compareOk - Hash verification failed");
             }
 
+            System.out.println("Signature checked");
             System.out.println("message recu");
 
         }
@@ -267,9 +268,68 @@ public class Utilities {
         System.out.println("=== Client closed ===\n");
     }
 
-
-
-
     // -------------------------------------------  RECAP METHOD ------------------------------------------- //
+
+    // -------------------------------------------  BONUS METHOD ------------------------------------------- //
+
+    public static void sendCoucouMessageBonus(TCPClient client, String key) throws Exception {
+
+        String message;
+        do {
+
+            // ask for message
+            System.out.print("Enter a message: ");
+            message = scanner.nextLine();
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            // Sign the message (hmacMd5)
+            String hmac =  new HMACHelper().hash(message,key);
+
+            // Use of AES (cipher)
+            AES aes = new AES();
+            String cipher = aes.encrypt(message, key);
+
+            // send message
+            client.sendMessage(cipher);
+            System.out.println("cipher sent: " + cipher);
+            client.sendMessage(hmac);
+            System.out.println("hmac sent: " + hmac);
+
+        } while (!message.isEmpty());
+    }
+
+    public static void readCoucouMessageBonus(TCPServer server, String key) throws Exception {
+
+        String encryptedMessage;
+        while ((encryptedMessage = server.readMessage()) != null) {
+
+            System.out.println("cypher : " + encryptedMessage);
+
+            String hmac = server.readMessage();
+            System.out.println("hmac : " + hmac);
+
+            // AES to decrypt the cipher
+            AES aes = new AES();
+            String msgDecrpyt = aes.decrypt(encryptedMessage, key);
+            System.out.println("msgDecrpyt : " + msgDecrpyt);
+
+            // RSA - Check signature
+            boolean compareOk = new HMACHelper().compare(hmac, msgDecrpyt, key);
+
+            if(!compareOk) {
+                throw new Exception("compareOk - Hash verification failed");
+            }
+
+            System.out.println("Signature checked");
+            System.out.println("message recu");
+
+        }
+
+        System.out.println("=== Client closed ===\n");
+    }
+
+    // -------------------------------------------  BONUS METHOD ------------------------------------------- //
 
 }

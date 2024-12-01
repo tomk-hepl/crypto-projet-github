@@ -31,4 +31,9 @@ public class HMACHelper implements IHMAC {
         return new HmacUtils(algorithm, key).hmacHex(data);
     }
 
+    public boolean compare(String hmacToCompare, String data, String key) throws NoSuchAlgorithmException, InvalidKeyException {
+        String newHash = hash(data, key);
+        return hmacToCompare.equals(newHash);
+    }
+
 }

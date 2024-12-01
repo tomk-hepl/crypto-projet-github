@@ -1,6 +1,4 @@
 package org.crypto_project.bonus;
-
-import org.crypto_project.utils.AES;
 import org.crypto_project.utils.DiffieHellmanExchange;
 import org.crypto_project.utils.TCPServer;
 import org.crypto_project.utils.Utilities;
@@ -20,7 +18,7 @@ public class Server {
                 String key = new DiffieHellmanExchange().serverExchange(server);
 
                 // listen in loop for client messages until it disconnect
-                Utilities.readAndDecryptEveryClientMsgUntilItDisconnects(server, new AES(), key);
+                Utilities.readCoucouMessageBonus(server, key);
             } catch (IOException e) {
                 // If current client disconnected, listen to new client
                 System.out.println("Error: " + e.getMessage());
