@@ -12,7 +12,7 @@ public class ClientRSA {
     public static void main(String[] args) throws Exception {
         TCPClient client = Utilities.clientInit("RSA", IP, PORT);
 
-        // Récupérer le chemin du dossier courant
+        // Get keystore DB file
         String currentDir = Paths.get("").toAbsolutePath().toString();
         String subRepoPrefix = "/src/main/java/org/crypto_project/rsa/";
         currentDir += subRepoPrefix;

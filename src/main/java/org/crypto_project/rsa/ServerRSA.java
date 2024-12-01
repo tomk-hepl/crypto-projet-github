@@ -12,6 +12,7 @@ public class ServerRSA {
     public static void main(String[] args) throws Exception {
         TCPServer server = Utilities.serverInit("RSA", PORT);
 
+        // Get keystore DB file
         String currentDir = Paths.get("").toAbsolutePath().toString();
         String subRepoPrefix = "/src/main/java/org/crypto_project/rsa/";
         currentDir += subRepoPrefix;
