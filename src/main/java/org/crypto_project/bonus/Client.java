@@ -1,6 +1,4 @@
 package org.crypto_project.bonus;
-
-import org.crypto_project.utils.AES;
 import org.crypto_project.utils.DiffieHellmanExchange;
 import org.crypto_project.utils.TCPClient;
 import org.crypto_project.utils.Utilities;
@@ -14,7 +12,7 @@ public class Client {
 
         String key = new DiffieHellmanExchange().clientExchange(client);
 
-        Utilities.scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(client, new AES(), key);
+        Utilities.sendCoucouMessageBonus(client, key);
 
         Utilities.closeClient(client);
     }
