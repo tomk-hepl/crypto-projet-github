@@ -1,5 +1,4 @@
 package org.crypto_project.utils;
-
 import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -10,14 +9,14 @@ public class SHAUnRSA  implements RSAHashAlgorithm{
 
     @Override
     public String rsahash(String message, PrivateKey privateKey) throws Exception {
-        // SHA-1 hash generation
-        MessageDigest md = MessageDigest.getInstance("SHA-1");
-        byte[] hashBytes = md.digest(message.getBytes());
+
+        SHAUn shaUn = new SHAUn();
+        String hashTest = shaUn.hash(message);
 
         // Sign the hash with RSA private key
         Signature signature = Signature.getInstance("SHA1withRSA");
         signature.initSign(privateKey);
-        signature.update(hashBytes);
+        signature.update(hashTest.getBytes());
 
         // Return the RSA signature encoded in Base64
         return Base64.getEncoder().encodeToString(signature.sign());
@@ -62,6 +61,9 @@ public class SHAUnRSA  implements RSAHashAlgorithm{
         Signature signature = Signature.getInstance("SHA1withRSA");
         signature.initVerify(publicKey);
         signature.update(hashR.getBytes());
+
+        String debug = signature.toString();
+        System.out.println("rsaCompareWithHash - signature : " + debug);
 
         return signature.verify(Base64.getDecoder().decode(signatureR));
 

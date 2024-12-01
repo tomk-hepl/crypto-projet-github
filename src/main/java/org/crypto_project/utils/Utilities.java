@@ -208,12 +208,13 @@ public class Utilities {
 
             // Sign the message (hash + RSA)
             String signature =  new SHAUnRSA().rsahash(message,privateKey);
+            System.out.println("Signature  : "+ signature);
 
             // Use of AES (cipher)
             AES aes = new AES();
             String cipher = aes.encrypt(message, key);
 
-            System.out.println("Message "+ message +" encrypted");
+            System.out.println("Message : "+ message +" encrypted");
 
             // send message
             client.sendMessage(cipher);
