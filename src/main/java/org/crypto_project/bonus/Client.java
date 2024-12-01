@@ -1,4 +1,6 @@
-package org.crypto_project.recapitulatif;
+package org.crypto_project.bonus;
+
+import org.crypto_project.utils.AES;
 import org.crypto_project.utils.DiffieHellmanExchange;
 import org.crypto_project.utils.TCPClient;
 import org.crypto_project.utils.Utilities;
@@ -10,11 +12,9 @@ public class Client {
     public static void main(String[] args) throws Exception {
         TCPClient client = Utilities.clientInit("AES", IP, PORT);
 
-        // Génération de la clé
         String key = new DiffieHellmanExchange().clientExchange(client);
 
-        // Message
-        Utilities.sendCoucouMessage(client, key);
+        Utilities.scanUserMsgThenEncryptItAndSendItToServerWhileItIsNotEmpty(client, new AES(), key);
 
         Utilities.closeClient(client);
     }

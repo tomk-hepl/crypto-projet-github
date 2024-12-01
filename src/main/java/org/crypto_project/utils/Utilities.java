@@ -1,8 +1,6 @@
 package org.crypto_project.utils;
 import java.io.IOException;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.*;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Scanner;
@@ -200,24 +198,76 @@ public class Utilities {
                 continue;
             }
 
-            // encrypt message
-            //String encryptedMessage = algo.hash(message, key);
+            // SHA with RSA (generate)
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048); // Taille de la clé
+            KeyPair keyPair = keyPairGenerator.generateKeyPair();
+            PrivateKey privateKey = keyPair.getPrivate();
+            PublicKey publicKey = keyPair.getPublic();
+            String publicKeyString = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+
+            // Sign the message (hash + RSA)
+            String signature =  new SHAUnRSA().rsahash(message,privateKey);
+
+            // Use of AES (cipher)
+            AES aes = new AES();
+            String cipher = aes.encrypt(message, key);
 
             System.out.println("Message "+ message +" encrypted");
+
             // send message
-            // client.sendMessage(encryptedMessage);
-            //System.out.println("Encrypted message sent: " + encryptedMessage);
+            client.sendMessage(cipher);
+            System.out.println("Cipher sent: " + cipher);
+            client.sendMessage(signature);
+            System.out.println("Signature sent: " + signature);
+            client.sendMessage(publicKeyString);
+            System.out.println("Public Key String sent: " + publicKeyString);
+
         } while (!message.isEmpty());
     }
 
     public static void readCoucouMessage(TCPServer server, String key) throws Exception {
+
         String encryptedMessage;
         while ((encryptedMessage = server.readMessage()) != null) {
-            // String message = algo.decrypt(encryptedMessage, key);
-            //System.out.println("received message: "+encryptedMessage+"\n\t=> decrypted message: "+message);
+
+            System.out.println("encryptedMessage : " + encryptedMessage);
+
+            String signature = server.readMessage();
+            System.out.println("signature : " + signature);
+
+            String publicKey = server.readMessage();
+            System.out.println("publicKey : " + publicKey);
+
+            // AES to decrypt the cipher
+            AES aes = new AES();
+            String msgDecrpyt = aes.decrypt(encryptedMessage, key);
+            System.out.println("msgDecrpyt : " + msgDecrpyt);
+
+            // SHA to hash message
+            String hash = new SHAUn().hash(msgDecrpyt);
+            System.out.println("hash : " + hash);
+
+            SHAUnRSA shaRsa = new SHAUnRSA();
+            PublicKey publicKeyD = loadPublicKey(publicKey);
+            System.out.println("publicKeyD : " + publicKeyD);
+
+            // RSA - Check signature
+            boolean compareOk = shaRsa.rsaCompareWithHash(hash, signature, publicKeyD);
+
+            if(!compareOk) {
+                throw new Exception("compareOk - Hash verification failed");
+            }
+
+            System.out.println("message recu");
+
         }
+
         System.out.println("=== Client closed ===\n");
     }
+
+
+
 
     // -------------------------------------------  RECAP METHOD ------------------------------------------- //
 

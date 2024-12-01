@@ -55,4 +55,18 @@ public class SHAUnRSA  implements RSAHashAlgorithm{
             return "Invalid signature! Message compromised or invalid.";
         }
     }
+
+    public boolean rsaCompareWithHash(String hashR, String signatureR, PublicKey publicKey) throws Exception {
+
+        // Verify the received signature using the public key
+        Signature signature = Signature.getInstance("SHA1withRSA");
+        signature.initVerify(publicKey);
+        signature.update(hashR.getBytes());
+
+        return signature.verify(Base64.getDecoder().decode(signatureR));
+
+    }
+
+
+
 }
