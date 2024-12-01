@@ -185,6 +185,51 @@ public class Utilities {
         System.out.println("Client closed");
     }
 
+    // -------------------------------------------  RSA METHODS ------------------------------------------- //
+
+    public static void sendRSAMessageWithKeystore(TCPClient client, PublicKey key) throws Exception {
+
+        String message;
+        do {
+
+            // ask for message
+            System.out.print("Enter a message: ");
+            message = scanner.nextLine();
+            if (message.isEmpty()) {
+                continue;
+            }
+
+            // Chiffrer le message
+            KeyStoreRSAUtil keystoreUtil = new KeyStoreRSAUtil();
+            String encryptedMessage = keystoreUtil.encryptWithRSA(message, key);
+
+            // Envoi au serveur
+            client.sendMessage(encryptedMessage);
+            System.out.println("encryptedMessage sent: " + encryptedMessage);
+
+        } while (!message.isEmpty());
+    }
+
+    public static void readRSAMessageWithKeystore(TCPServer server, PrivateKey key) throws Exception {
+
+        String encryptedMessage;
+        while ((encryptedMessage = server.readMessage()) != null) {
+
+            System.out.println("encryptedMessage : " + encryptedMessage);
+
+            // Dechiffrer le message
+            KeyStoreRSAUtil keystoreUtil = new KeyStoreRSAUtil();
+            String decryptedMessage = keystoreUtil.decryptWithRSA(encryptedMessage, key);
+
+            System.out.println("decryptedMessage : " + decryptedMessage);
+        }
+
+        System.out.println("=== Client closed ===\n");
+    }
+
+
+    // -------------------------------------------  RSA METHOD ------------------------------------------- //
+
     // -------------------------------------------  RECAP METHOD ------------------------------------------- //
 
     public static void sendCoucouMessage(TCPClient client, String key) throws Exception {
